@@ -1,4 +1,4 @@
-# Generic template for vars_file
-{% for key, value in vars_dict.items() %}
-{{ key }}: "{{ value }}"
+# vars_template.yml.j2
+{% for var in vars %}
+{{ var.variable_name }}: "{{ var.value }}"
 {% endfor %}

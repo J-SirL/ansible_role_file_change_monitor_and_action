@@ -15,15 +15,15 @@
     dest: "{{ config_directory }}/file_action_mapping.yml"
     mode: '0644'
 
-# Generate vars_files for each action
 - name: Generate vars_files for each action
   ansible.builtin.template:
     src: vars_template.yml.j2
     dest: "{{ config_directory }}/{{ item.vars_file }}"
     vars:
-      vars_dict: "{{ item.vars }}"
+      vars: "{{ item.vars }}"
   loop: "{{ file_action_mappings }}"
   when: item.vars_file is defined and item.vars is defined
+
 
 - name: Deploy the file monitoring script
   ansible.builtin.template:

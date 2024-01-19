@@ -5,14 +5,22 @@
 # not used anymore file_to_monitor: "/usr/local/bin/mount_nas.sh"
 
 # defaults/main.yml
+# Mapping of files to actions
 file_action_mappings:
   - name: "restore_nas"
     git_repo: "https://example.com/nas_repo.git"
     playbook: "restore_nas_playbook.yml"
     vars_file: "vars/restore_nas_vars.yml"
-  # Add more actions as needed
-
-
+    vars:
+      - variable_name: "local_network_ip_prefix"
+        value: "192.168.1.0"
+      - variable_name: "nas_ip"
+        value: "192.168.1.100"
+      - variable_name: "share_name"
+        value: "/defaultShare"
+      - variable_name: "mount_point"
+        value: "/mnt/defaultShare"
+      # ... additional variables as needed ...
 
 # Path and name of the monitoring script
 monitor_script_path: "/usr/local/bin/file_monitor.sh"

@@ -12,8 +12,8 @@ monitor_service_name: "file_monitor_service"
 systemd_service_path: "/etc/systemd/system/{{ monitor_service_name }}.service"
 
 # Git repository settings
-git_repo_url: "https://github.com/J-SirL/almalinux9-my-developer-machine"
-git_repo_dest: "/path/to/repo"
+git_repo_url: "git@github.com:J-SirL/ansible-role-mount-nas-depending-on-ip-range.git"
+git_repo_dest: "/srv/ansible_role_mount_nas_depending_on_ip_range"
 
 # Playbook settings
 playbook_path: "{{ git_repo_dest }}/automate_nas_mount_on_network_change.yml"

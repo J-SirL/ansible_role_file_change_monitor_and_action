@@ -3,6 +3,8 @@
   ansible.builtin.git:
     repo: "{{ git_repo_url }}"
     dest: "{{ git_repo_dest }}"
+    single_branch: yes
+    version: main
   register: git_result
 
 - name: Run Ansible playbook

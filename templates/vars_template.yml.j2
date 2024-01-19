@@ -1,4 +1,4 @@
 # vars_template.yml.j2
 {% for var in vars %}
-{{ var.variable_name }}: "{{ var.value }}"
+{{ var['variable_name'] }}: "{{ var['value'] }}"
 {% endfor %}

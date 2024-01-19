@@ -10,8 +10,8 @@ read_yaml() {
 
 
 # Monitoring loop
-inotifywait -m -e modify --format '%w%f' -q $(awk '/file_action_mappings:/,/^[^ ]/' $CONFIG_FILE | grep 'name:' | awk '{print $2}' | tr -d ':') | while read action_name; do
-    ACTION=$(echo "$action_name" | read_yaml "['file_action_mappings'] | select(.name == '$action_name')")
+inotifywait -m -e modify --format '%w%f' -q $(jq -r '.file_actions[].name' $CONFIG_FILE) | while read action_name; do
+    ACTION=$(jq -r --arg action_name "$action_name" '.file_actions[] | select(.name == $action_name)' $CONFIG_FILE)
     GIT_REPO=$(echo "$ACTION" | jq -r '.git_repo')
     PLAYBOOK_PATH=$(echo "$ACTION" | jq -r '.playbook')
     VARS_FILE=$(echo "$ACTION" | jq -r '.vars_file')

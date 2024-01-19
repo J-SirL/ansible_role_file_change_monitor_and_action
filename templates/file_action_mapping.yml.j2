@@ -1,14 +1,7 @@
 file_actions:
-  /usr/local/bin/mount_nas.sh:
-    git_repo: "https://example.com/nas_repo.git"
-    playbook: "restore_nas_playbook.yml"
-    vars:
-      local_network_ip_prefix: "192.168.48"
-      nas_ip: "192.168.48.110"
-      share_name: "/BackupShare"
-      mount_point: "/mnt/BackupShare"
-      mount_type: "nfs"
-      script_path: "/usr/local/bin/mount_nas.sh"
-      service_name: "nas_mount_service"
-      network_dispatcher_script: "/etc/NetworkManager/dispatcher.d/99-trigger-nas-mount"
-  # Add more file actions as needed
+{% for action in file_action_mappings %}
+  "{{ action.name }}":
+    git_repo: "{{ action.git_repo }}"
+    playbook: "{{ action.playbook }}"
+    vars_file: "{{ action.vars_file | default('') }}"
+{% endfor %}

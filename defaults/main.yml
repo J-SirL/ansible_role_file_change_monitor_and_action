@@ -2,7 +2,17 @@
 # Default variables for file_change_monitor_and_action role
 
 # File to monitor
-file_to_monitor: "/usr/local/bin/mount_nas.sh"
+# not used anymore file_to_monitor: "/usr/local/bin/mount_nas.sh"
+
+# defaults/main.yml
+file_action_mappings:
+  /usr/local/bin/mount_nas.sh:
+    git_repo: https://example.com/nas_repo.git
+    playbook: restore_nas_playbook.yml
+  /path/to/another/file:
+    git_repo: https://example.com/another_repo.git
+    playbook: another_playbook.yml
+
 
 # Path and name of the monitoring script
 monitor_script_path: "/usr/local/bin/file_monitor.sh"

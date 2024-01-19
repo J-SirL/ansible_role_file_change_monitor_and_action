@@ -1,0 +1,6 @@
+file_actions:
+{% for file, actions in file_action_mappings.items() %}
+  "{{ file }}":
+    git_repo: "{{ actions.git_repo }}"
+    playbook: "{{ actions.playbook }}"
+{% endfor %}

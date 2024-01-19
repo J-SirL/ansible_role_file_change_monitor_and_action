@@ -4,11 +4,16 @@
     name: inotify-tools
     state: present
 
-- name: Upload NAS mount script
+- name: Create directory for configuration file
+  ansible.builtin.file:
+    path: "{{ config_directory }}"
+    state: directory
+
+- name: Deploy configuration file for file monitoring
   ansible.builtin.template:
-    src: mount_nas_check_type.sh.j2
-    dest: "{{ file_to_monitor }}"
-    mode: '0755'
+    src: file_action_mapping.yml.j2
+    dest: "{{ config_directory }}/file_action_mapping.yml"
+    mode: '0644'
 
 - name: Deploy the file monitoring script
   ansible.builtin.template:
@@ -28,6 +33,6 @@
 
 - name: Enable and start file monitoring service
   ansible.builtin.systemd:
-    name: "{{ monitor_service_name }}"
+    name: "{{ systemd_service_name }}"
     enabled: true
     state: started

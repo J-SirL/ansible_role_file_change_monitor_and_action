@@ -1,13 +1,27 @@
 #!/bin/bash
 
-# Monitoring the specified file for changes
-FILE_TO_MONITOR="{{ file_to_monitor }}"
-GIT_REPO="{{ git_repo_url }}"
-PLAYBOOK_PATH="{{ playbook_path }}"
+# Path to the configuration file
+CONFIG_FILE="{{ config_directory }}/file_action_mapping.yml"
 
-inotifywait -m -e modify $FILE_TO_MONITOR | while read path action file; do
-    if [[ "$file" == "$(basename $FILE_TO_MONITOR)" ]]; then
-        git clone $GIT_REPO {{ git_repo_dest }}
-        ansible-playbook $PLAYBOOK_PATH
+# Function to read YAML file using Python
+read_yaml() {
+    python -c "import yaml; import sys; print(yaml.safe_load(sys.stdin.read())$1)"
+}
+
+# Monitoring loop
+inotifywait -m -e modify --format '%w%f' -q $(awk '/file_actions:/,/^[^ ]/' $CONFIG_FILE | grep ':' | awk '{print $1}' | tr -d ':') | while read file; do
+    GIT_REPO=$(echo "$file" | read_yaml "['file_actions']['$file']['git_repo']")
+    PLAYBOOK_PATH=$(echo "$file" | read_yaml "['file_actions']['$file']['playbook']")
+
+    if [ -n "$GIT_REPO" ] && [ -n "$PLAYBOOK_PATH" ]; then
+        # Cloning the Git repository to a temporary location
+        TEMP_REPO_DIR=$(mktemp -d)
+        git clone $GIT_REPO $TEMP_REPO_DIR
+
+        # Running the playbook from the cloned repository
+        ansible-playbook --connection=local $TEMP_REPO_DIR/$PLAYBOOK_PATH
+
+        # Clean up the temporary repository
+        rm -rf $TEMP_REPO_DIR
     fi
 done

@@ -1,0 +1,29 @@
+---
+galaxy_info:
+  role_name: file_change_monitor_and_action
+  namespace: jsirl
+  author: Johan Sörell
+  description: |
+    The `file_change_monitor_and_action` role enables robust file monitoring and
+    dynamic action execution. Utilizing inotify-tools for file change detection, 
+    it automates responses such as cloning Git repositories and running specific 
+    Ansible playbooks. This role is ideal for systems where automatic responses 
+    to file modifications are critical. It includes a systemd service setup for 
+    continuous monitoring and is highly adaptable to various monitoring needs.
+  license: GPL-3.0
+  min_ansible_version: "2.9"
+  platforms:
+    - name: EL
+      versions:
+        - "8"
+        - "9"
+    - name: Fedora
+      versions:
+        - all
+  galaxy_tags:
+    - linux
+    - automation
+    - monitoring
+    - configuration
+    - inotify
+dependencies: []

@@ -8,20 +8,27 @@ read_yaml() {
     python -c "import yaml; import sys; print(yaml.safe_load(sys.stdin.read())$1)"
 }
 
+
 # Monitoring loop
-inotifywait -m -e modify --format '%w%f' -q $(awk '/file_actions:/,/^[^ ]/' $CONFIG_FILE | grep ':' | awk '{print $1}' | tr -d ':') | while read file; do
-    GIT_REPO=$(echo "$file" | read_yaml "['file_actions']['$file']['git_repo']")
-    PLAYBOOK_PATH=$(echo "$file" | read_yaml "['file_actions']['$file']['playbook']")
+inotifywait -m -e modify --format '%w%f' -q $(awk '/file_action_mappings:/,/^[^ ]/' $CONFIG_FILE | grep 'name:' | awk '{print $2}' | tr -d ':') | while read action_name; do
+    ACTION=$(echo "$action_name" | read_yaml "['file_action_mappings'] | select(.name == '$action_name')")
+    GIT_REPO=$(echo "$ACTION" | jq -r '.git_repo')
+    PLAYBOOK_PATH=$(echo "$ACTION" | jq -r '.playbook')
+    VARS_FILE=$(echo "$ACTION" | jq -r '.vars_file')
 
     if [ -n "$GIT_REPO" ] && [ -n "$PLAYBOOK_PATH" ]; then
-        # Cloning the Git repository to a temporary location
         TEMP_REPO_DIR=$(mktemp -d)
         git clone $GIT_REPO $TEMP_REPO_DIR
 
-        # Running the playbook from the cloned repository
-        ansible-playbook --connection=local $TEMP_REPO_DIR/$PLAYBOOK_PATH
+        # Include vars file if specified
+        EXTRA_VARS=""
+        if [ -n "$VARS_FILE" ]; then
+            EXTRA_VARS="-e @$VARS_FILE"
+        fi
 
-        # Clean up the temporary repository
+        ansible-playbook --connection=local $TEMP_REPO_DIR/$PLAYBOOK_PATH $EXTRA_VARS
+
         rm -rf $TEMP_REPO_DIR
     fi
 done
+

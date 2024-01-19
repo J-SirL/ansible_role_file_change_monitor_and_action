@@ -6,12 +6,12 @@
 
 # defaults/main.yml
 file_action_mappings:
-  /usr/local/bin/mount_nas.sh:
-    git_repo: https://example.com/nas_repo.git
-    playbook: restore_nas_playbook.yml
-  /path/to/another/file:
-    git_repo: https://example.com/another_repo.git
-    playbook: another_playbook.yml
+  - name: "restore_nas"
+    git_repo: "https://example.com/nas_repo.git"
+    playbook: "restore_nas_playbook.yml"
+    vars_file: "vars/restore_nas_vars.yml"
+  # Add more actions as needed
+
 
 
 # Path and name of the monitoring script

@@ -1,0 +1,22 @@
+---
+# Default variables for file_change_monitor_and_action role
+
+# File to monitor
+file_to_monitor: "/usr/local/bin/mount_nas.sh"
+
+# Path and name of the monitoring script
+monitor_script_path: "/usr/local/bin/file_monitor.sh"
+monitor_service_name: "file_monitor_service"
+
+# Systemd service file path
+systemd_service_path: "/etc/systemd/system/{{ monitor_service_name }}.service"
+
+# Git repository settings
+git_repo_url: "https://github.com/J-SirL/almalinux9-my-developer-machine"
+git_repo_dest: "/path/to/repo"
+
+# Playbook settings
+playbook_path: "{{ git_repo_dest }}/automate_nas_mount_on_network_change.yml"
+
+# Restart parameters for the systemd service
+restart_sec: 3

@@ -1,0 +1,33 @@
+---
+- name: Check if inotify-tools is installed
+  ansible.builtin.package:
+    name: inotify-tools
+    state: present
+
+- name: Upload NAS mount script
+  ansible.builtin.template:
+    src: mount_nas_check_type.sh.j2
+    dest: "{{ file_to_monitor }}"
+    mode: '0755'
+
+- name: Deploy the file monitoring script
+  ansible.builtin.template:
+    src: file_monitor_script.sh.j2
+    dest: "{{ monitor_script_path }}"
+    mode: '0755'
+
+- name: Create systemd service for file monitoring
+  ansible.builtin.template:
+    src: file_monitor_service.j2
+    dest: "{{ systemd_service_path }}"
+    mode: '0644'
+
+- name: Reload systemd to recognize the new service
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Enable and start file monitoring service
+  ansible.builtin.systemd:
+    name: "{{ monitor_service_name }}"
+    enabled: true
+    state: started

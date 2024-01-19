@@ -1,0 +1,10 @@
+[Unit]
+Description=File Change Monitor Service
+
+[Service]
+ExecStart={{ monitor_script_path }}
+Restart=always
+RestartSec={{ restart_sec }}
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Monitoring the specified file for changes
+FILE_TO_MONITOR="{{ file_to_monitor }}"
+GIT_REPO="{{ git_repo_url }}"
+PLAYBOOK_PATH="{{ playbook_path }}"
+
+inotifywait -m -e modify $FILE_TO_MONITOR | while read path action file; do
+    if [[ "$file" == "$(basename $FILE_TO_MONITOR)" ]]; then
+        git clone $GIT_REPO {{ git_repo_dest }}
+        ansible-playbook $PLAYBOOK_PATH
+    fi
+done

@@ -34,10 +34,6 @@
     var: item
   loop: "{{ file_action_mappings }}"
 
-
-
-- fail:
-
 - name: Deploy the file monitoring script
   ansible.builtin.template:
     src: file_monitor_script.sh.j2

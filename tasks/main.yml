@@ -9,6 +9,13 @@
     path: "{{ config_directory }}"
     state: directory
 
+- name: Debug - Print file action mapping items
+  ansible.builtin.debug:
+    msg: "Item: {{ item }}"
+  loop: "{{ file_action_mappings }}"
+
+
+
 - name: Deploy configuration file for file monitoring
   ansible.builtin.template:
     src: file_action_mapping.yml.j2

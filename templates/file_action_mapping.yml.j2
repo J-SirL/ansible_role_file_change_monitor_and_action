@@ -1,11 +1,20 @@
-# file_action_mapping.yml.j2
-{% for action in file_action_mappings %}
-- Name: {{ action.name }}
-  Git Repo: {{ action.git_repo }}
-  Playbook: {{ action.playbook }}
-  Vars File: {{ action.vars_file }}
-  Variables:
-  {% for var in action.vars %}
-    - {{ var.variable_name }}: "{{ var.value }}"
-  {% endfor %}
-{% endfor %}
+{
+  "file_actions": [
+    {% for action in file_action_mappings %}
+    {
+      "name": "{{ action.name }}",
+      "git_repo": "{{ action.git_repo }}",
+      "playbook": "{{ action.playbook }}",
+      "vars_file": "{{ action.vars_file | default('') }}",
+      "vars": [
+        {% for var in action.vars %}
+        {
+          "variable_name": "{{ var.variable_name }}",
+          "value": "{{ var.value }}"
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+      ]
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+  ]
+}

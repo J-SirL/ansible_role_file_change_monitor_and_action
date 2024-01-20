@@ -22,15 +22,11 @@
   loop: "{{ file_action_mappings }}"
   when: item.vars_file is defined and item.vars is defined
 
-- name: Deploy configuration file for file monitoring
+- name: Deploy file action mapping configuration
   ansible.builtin.template:
     src: file_action_mapping.yml.j2
     dest: "{{ config_directory }}/file_action_mapping.yml"
-    owner: root
-    group: root
-    mode: '0644'  # Update the mode as needed
-  vars:
-    file_action_mappings: "{{ your_file_action_mappings_variable }}"
+    mode: '0644'  # or any other appropriate permission mode
 
 
 - name: Debug file_action_mappings
@@ -39,14 +35,6 @@
   loop: "{{ file_action_mappings }}"
 
 
-- name: Test - File Action Mappings
-  ansible.builtin.template:
-    src: file_action_mappings_template.yml.j2
-    dest: "/tmp/debug_file_action_mappings.yml"
-  vars:
-    vars: "{{ item.vars }}"
-  loop: "{{ file_action_mappings }}"
-  when: item.vars_file is defined and item.vars is defined
 
 - fail:
 

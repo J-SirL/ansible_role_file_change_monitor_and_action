@@ -22,6 +22,9 @@ file_action_mappings:
         value: "/mnt/defaultShare"
       # ... additional variables as needed ...
 
+# Configuration directory path
+config_directory: "/etc/myansible/config"
+
 # Path and name of the monitoring script
 monitor_script_path: "/usr/local/bin/file_monitor.sh"
 monitor_service_name: "file_monitor_service"

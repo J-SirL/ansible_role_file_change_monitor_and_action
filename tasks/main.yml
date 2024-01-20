@@ -14,7 +14,17 @@
     msg: "Item: {{ item }}"
   loop: "{{ file_action_mappings }}"
 
+## put this in order after first test
 
+- name: Generate vars_files for each action
+  ansible.builtin.template:
+    src: vars_template.yml.j2
+    dest: "{{ config_directory }}/{{ item.vars_file }}"
+    vars:
+      vars: "{{ item.vars }}"
+  loop: "{{ file_action_mappings }}"
+  when: item.vars_file is defined and item.vars is defined
+## end
 
 - name: Deploy configuration file for file monitoring
   ansible.builtin.template:

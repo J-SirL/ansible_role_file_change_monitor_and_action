@@ -1,7 +1,11 @@
-file_actions:
-{% for action in file_action_mappings %}
-  "{{ action.name }}":
-    git_repo: "{{ action.git_repo }}"
-    playbook: "{{ action.playbook }}"
-    vars_file: "{{ action.vars_file | default('') }}"
+file_action_mappings:
+{% for mapping in template_var %}
+- Name: {{ mapping.name }}
+  Git Repo: {{ mapping.git_repo }}
+  Playbook: {{ mapping.playbook }}
+  Vars File: {{ mapping.vars_file }}
+  Vars:
+    {% for var in mapping.vars %}
+    - {{ var.variable_name }}: {{ var.value }}
+    {% endfor %}
 {% endfor %}

@@ -15,6 +15,12 @@
     dest: "{{ config_directory }}/file_action_mapping.yml"
     mode: '0644'
 
+- name: Debug file_action_mappings
+  ansible.builtin.debug:
+    var: item
+  loop: "{{ file_action_mappings }}"
+
+
 - name: Generate vars_files for each action
   ansible.builtin.template:
     src: vars_template.yml.j2

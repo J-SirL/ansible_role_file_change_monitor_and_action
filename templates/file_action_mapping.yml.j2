@@ -1,11 +1,11 @@
-file_action_mappings:
-{% for mapping in template_var %}
-- Name: {{ mapping.name }}
-  Git Repo: {{ mapping.git_repo }}
-  Playbook: {{ mapping.playbook }}
-  Vars File: {{ mapping.vars_file }}
-  Vars:
-    {% for var in mapping.vars %}
-    - {{ var.variable_name }}: {{ var.value }}
-    {% endfor %}
+# file_action_mapping.yml.j2
+{% for action in file_action_mappings %}
+- Name: {{ action.name }}
+  Git Repo: {{ action.git_repo }}
+  Playbook: {{ action.playbook }}
+  Vars File: {{ action.vars_file }}
+  Variables:
+  {% for var in action.vars %}
+    - {{ var.variable_name }}: "{{ var.value }}"
+  {% endfor %}
 {% endfor %}

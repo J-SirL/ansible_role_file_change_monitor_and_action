@@ -48,7 +48,7 @@
 # Force git download
 - name: Download Git repo and run playbook
   ansible.builtin.git:
-    repo: "{{ item.git_repo_url }}"
+    repo: "{{ item.git_repo }}"
     dest: "{{ item.git_repo_dest}}"
     single_branch: yes
     version: main

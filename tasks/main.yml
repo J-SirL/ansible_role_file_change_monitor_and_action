@@ -45,6 +45,7 @@
   loop: "{{ file_action_mappings }}"
 
 
+
 # Force git download
 - name: Download Git repo and run playbook
   become_user: "{{ git_become }}"
@@ -53,6 +54,7 @@
     dest: "{{ item.git_repo_dest}}"
     single_branch: yes
     version: main
+    separate_git_dir: "{{ item.git_repo_dest}}"
   loop: "{{ file_action_mappings }}"
   register: git_result
 

@@ -45,6 +45,16 @@
   loop: "{{ file_action_mappings }}"
 
 
+- name: Ensure config and vars directories exist
+  ansible.builtin.file:
+    path: "{{ item.git_repo_dest }}"
+    state: directory
+    owner: "{{ git_become }}"
+    group: "{{ git_become }}"
+    mode: '0755'
+  loop: "{{ file_action_mappings }}"
+  become: true  
+
 
 # Force git download
 - name: Download Git repo and run playbook

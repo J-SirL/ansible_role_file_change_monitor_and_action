@@ -41,3 +41,6 @@ playbook_path: "{{ git_repo_dest }}/automate_nas_mount_on_network_change.yml"
 
 # Restart parameters for the systemd service
 restart_sec: 3
+
+# Adding my user for github
+git_become: jsorell

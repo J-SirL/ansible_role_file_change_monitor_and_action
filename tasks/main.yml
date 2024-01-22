@@ -47,6 +47,7 @@
 
 # Force git download
 - name: Download Git repo and run playbook
+  become_user: "{{ git_become }}"
   ansible.builtin.git:
     repo: "{{ item.git_repo }}"
     dest: "{{ item.git_repo_dest}}"

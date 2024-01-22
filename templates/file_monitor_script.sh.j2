@@ -13,12 +13,16 @@ read_yaml() {
 inotifywait -m -e modify --format '%w%f' -q $(jq -r '.file_actions[].name' $CONFIG_FILE) | while read action_name; do
     ACTION=$(jq -r --arg action_name "$action_name" '.file_actions[] | select(.name == $action_name)' $CONFIG_FILE)
     GIT_REPO=$(echo "$ACTION" | jq -r '.git_repo')
+    GIT_REPO_DEST=$(echo "$ACTION" | jq -r '.git_repo_dest')
     PLAYBOOK_PATH=$(echo "$ACTION" | jq -r '.playbook')
     VARS_FILE=$(echo "$ACTION" | jq -r '.vars_file')
 
     if [ -n "$GIT_REPO" ] && [ -n "$PLAYBOOK_PATH" ]; then
-        TEMP_REPO_DIR=$(mktemp -d)
-        git clone $GIT_REPO $TEMP_REPO_DIR
+        if [ -n "$GIT_REPO_DEST" ]; then
+            GIT_REPO_DEST=$(mktemp -d)
+        fi
+        # GIT_REPO_DEST=$(mktemp -d)
+        git clone $GIT_REPO $GIT_REPO_DEST
 
         # Include vars file if specified
         EXTRA_VARS=""
@@ -26,9 +30,9 @@ inotifywait -m -e modify --format '%w%f' -q $(jq -r '.file_actions[].name' $CONF
             EXTRA_VARS="-e @$VARS_FILE"
         fi
 
-        ansible-playbook --connection=local $TEMP_REPO_DIR/$PLAYBOOK_PATH $EXTRA_VARS
+        ansible-playbook --connection=local $GIT_REPO_DEST/$PLAYBOOK_PATH $EXTRA_VARS
 
-        rm -rf $TEMP_REPO_DIR
+        # rm -rf $TEMP_REPO_DIR # at the moment let us keep the playbook repo I renamed this to actual parameter GIT_REPO_DEST
     fi
 done
 

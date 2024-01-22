@@ -33,9 +33,23 @@
   ansible.builtin.debug:
     var: item
   loop: "{{ file_action_mappings }}"
-  notify: 
-    - 'Download Git repo and run playbook'
-    
+
+- name: Debug specific variable 'git_repo_dest'
+  debug:
+    msg: "{{ item.vars | selectattr('variable_name', 'equalto', 'git_repo_dest') | map(attribute='value') | list }}"
+  loop: "{{ file_action_mappings }}"
+
+- fail:
+# Force git download
+- name: Download Git repo and run playbook
+  ansible.builtin.git:
+    repo: "{{ git_repo_url }}"
+    dest: "{{ git_repo_dest }}"
+    single_branch: yes
+    version: main
+  register: git_result
+
+- name: Debug git repo download    
 
 - name: Deploy the file monitoring script
   ansible.builtin.template:

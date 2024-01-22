@@ -64,7 +64,6 @@
     dest: "{{ item.git_repo_dest}}"
     single_branch: yes
     version: main
-    separate_git_dir: "{{ item.git_repo_dest}}"
   loop: "{{ file_action_mappings }}"
   register: git_result
 

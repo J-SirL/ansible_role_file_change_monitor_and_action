@@ -39,6 +39,12 @@
     msg: "{{ item.vars | selectattr('variable_name', 'equalto', 'git_repo_dest') | map(attribute='value') | list }}"
   loop: "{{ file_action_mappings }}"
 
+- name: Debug git_repo_dest for each item in file_action_mappings
+  debug:
+    var: item.git_repo_dest
+  loop: "{{ file_action_mappings }}"
+
+
 - fail:
 
 # Force git download

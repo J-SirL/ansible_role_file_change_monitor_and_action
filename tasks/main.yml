@@ -35,11 +35,12 @@
   loop: "{{ file_action_mappings }}"
 
 - name: Debug specific variable 'git_repo_dest'
-  debug:
+  ansible.builtin.debug:
     msg: "{{ item.vars | selectattr('variable_name', 'equalto', 'git_repo_dest') | map(attribute='value') | list }}"
   loop: "{{ file_action_mappings }}"
 
 - fail:
+
 # Force git download
 - name: Download Git repo and run playbook
   ansible.builtin.git:

@@ -33,6 +33,9 @@
   ansible.builtin.debug:
     var: item
   loop: "{{ file_action_mappings }}"
+  notify: 
+    - 'Download Git repo and run playbook'
+    
 
 - name: Deploy the file monitoring script
   ansible.builtin.template:

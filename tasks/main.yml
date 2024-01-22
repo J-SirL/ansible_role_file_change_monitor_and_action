@@ -45,15 +45,14 @@
   loop: "{{ file_action_mappings }}"
 
 
-- fail:
-
 # Force git download
 - name: Download Git repo and run playbook
   ansible.builtin.git:
-    repo: "{{ git_repo_url }}"
-    dest: "{{ git_repo_dest }}"
+    repo: "{{ item.git_repo_url }}"
+    dest: "{{ item.git_repo_dest}}"
     single_branch: yes
     version: main
+  loop: "{{ file_action_mappings }}"
   register: git_result
 
     

@@ -26,4 +26,8 @@ galaxy_info:
     - monitoring
     - configuration
     - inotify
-dependencies: []
+dependencies: 
+  - name: jsirl.mount_nas_depending_on_ip_range
+    src: git@github.com:J-SirL/ansible-role-mount-nas-depending-on-ip-range
+    scm: git
+    version: main

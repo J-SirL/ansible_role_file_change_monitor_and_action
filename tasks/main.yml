@@ -57,7 +57,7 @@
 
 
 # Force git download
-- name: Download Git repo and run playbook
+- name: Download Git repo
   become_user: "{{ git_become }}"
   ansible.builtin.git:
     repo: "{{ item.git_repo }}"
@@ -67,7 +67,20 @@
   loop: "{{ file_action_mappings }}"
   register: git_result
 
-    
+- name: Run Ansible playbook in checkmode
+  ansible.builtin.command:
+    cmd: ansible-playbook "{{ playbook_path }} -CDvvv"
+  when: git_result.changed
+  register: playbook_results
+
+- name: If playbook_results fails
+  ansible.builtin.debug:
+     var: playbook_results
+  when: playbook_results.changed
+
+- name: Fail for now
+  ansible.builtin.fail:
+    msg: "Failing to break the playbook here!"
 
 - name: Deploy the file monitoring script
   ansible.builtin.template:

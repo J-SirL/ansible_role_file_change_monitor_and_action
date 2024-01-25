@@ -69,7 +69,7 @@
 
 - name: Run Ansible playbook in checkmode
   ansible.builtin.command:
-    cmd: ansible-playbook "{{ playbook_path }} -CDvvv"
+    cmd: ansible-playbook "{{ file_action_mappings['restore_nas']['playbook'] }} -CDvvv"
   when: git_result.changed
   register: playbook_results
 
